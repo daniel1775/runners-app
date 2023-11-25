@@ -1,4 +1,4 @@
-import React from 'react';
+import Text from '../atoms/Text';
 
 type TypeCardRunnerProps = {
 	userId: number;
@@ -9,6 +9,7 @@ type TypeCardRunnerProps = {
 	elevation: number;
 	speed: number;
 	pace: number;
+	beats: number;
 };
 
 const CardRunner = ({
@@ -20,8 +21,14 @@ const CardRunner = ({
 	elevation,
 	speed,
 	pace,
+	beats,
 }: TypeCardRunnerProps) => {
-	return <div>CardRunner</div>;
+	return (
+		<div>
+			<Text>{`User id: ${userId}`}</Text>
+			<div></div>
+		</div>
+	);
 };
 
 export default CardRunner;
