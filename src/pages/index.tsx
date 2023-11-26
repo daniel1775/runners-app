@@ -8,6 +8,8 @@ export default function Home() {
 	// @ts-ignore
 	const firstRunner = runnersDB[0] as TypeRunnerData;
 
+	const onViewAllClick = () => {};
+
 	return (
 		<div>
 			<CardRunner
@@ -20,6 +22,7 @@ export default function Home() {
 				speed={firstRunner.averageSpeedInMetersPerSecond}
 				pace={firstRunner.averagePaceInMinutesPerKilometer}
 				beats={firstRunner.averageHeartRateInBeatsPerMinute}
+				onViewAllClick={onViewAllClick}
 			/>
 		</div>
 	);
