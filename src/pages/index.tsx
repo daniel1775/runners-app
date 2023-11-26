@@ -4,6 +4,7 @@ import runnersDB from '@/lib/data/runners.json';
 
 import CardRunner from '@/UI/molecules/card/CardRunner';
 import PaginationControls from '@/UI/molecules/pagination/PaginationControls';
+import Header from '@/UI/layouts/Header';
 
 import type { TypeRunnerData } from '@/lib/types/runners';
 
@@ -49,6 +50,7 @@ export default function Home() {
 
 	return (
 		<div>
+			<Header />
 			<div className='flex justify-center'>
 				<PaginationControls
 					handlePrevPage={handlePrevPage}
