@@ -6,7 +6,9 @@ type typeTextProps = {
 };
 
 const Text = ({ children, className }: typeTextProps): JSX.Element => {
-	return <p className={`text-black ${className ?? ''}`}>{children}</p>;
+	return (
+		<p className={`text-black text-lg ${className ?? ''}`}>{children}</p>
+	);
 };
 
 export default Text;

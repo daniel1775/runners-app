@@ -1,5 +1,6 @@
 import Text from '../../atoms/Text';
 import SingleMetric from '@/UI/atoms/card/SingleMetric';
+import EyeIcon from '@/assets/svg/eye.svg';
 
 type TypeCardRunnerProps = {
 	userId: number;
@@ -60,28 +61,18 @@ const CardRunner = ({
 	];
 
 	return (
-		<div className='bg-light-gray w-full'>
-			<Text>{`User id: ${userId}`}</Text>
-			<div className=''>
-				{dataToRender.map((metric, index) => {
-					if (index !== dataToRender.length - 1) {
-						return (
-							<SingleMetric
-								key={index}
-								label={metric.label}
-								value={metric.value}
-								hasBorder
-							/>
-						);
-					}
-					return (
-						<SingleMetric
-							key={index}
-							label={metric.label}
-							value={metric.value}
-						/>
-					);
-				})}
+		<div className='bg-light-gray h-auto w-full px-4'>
+			<Text className='text-dark-gray font-bold'>{`User id: ${userId}`}</Text>
+			<div className='flex gap-6 h-fit'>
+				{dataToRender.map((metric, index) => (
+					<SingleMetric
+						key={index}
+						label={metric.label}
+						value={metric.value}
+					/>
+				))}
+				<div className='flex flex-col'></div>
+				<EyeIcon className='text-blue' />
 			</div>
 		</div>
 	);
