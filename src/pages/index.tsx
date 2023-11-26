@@ -1,6 +1,6 @@
 import runnersDB from '@/lib/data/runners.json';
 
-import CardRunner from '@/UI/molecules/CardRunner';
+import CardRunner from '@/UI/molecules/card/CardRunner';
 
 import type { TypeRunnerData } from '@/lib/types/runners';
 
