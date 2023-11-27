@@ -11,9 +11,15 @@ import type { TypeRunnerData } from '@/lib/types/runners';
 export default function Home() {
 	const allRunners = useMemo(() => {
 		let allRunners = runnersDB as Array<TypeRunnerData>;
-		let allRunnersOrganized;
 
-		return runnersDB as Array<TypeRunnerData>;
+		let allRunnersAnalyzed = allRunners.map((singleRunner) => {
+			if (singleRunner.averagePaceInMinutesPerKilometer < 5) {
+				return { ...singleRunner, isSuspect: true };
+			}
+			return { ...singleRunner, isSuspect: false };
+		});
+
+		return allRunnersAnalyzed;
 	}, []);
 
 	const [currentPage, setCurrentPage] = useState(1);
@@ -59,7 +65,7 @@ export default function Home() {
 					totalPages={totalPages}
 				/>
 			</div>
-			<div className='flex flex-col gap-3'>
+			<div className='flex flex-col gap-3 w-[90%] mx-auto'>
 				{runnersToShow.map((singleRunner) => (
 					<CardRunner
 						key={singleRunner.id}
@@ -73,6 +79,7 @@ export default function Home() {
 						pace={singleRunner.averagePaceInMinutesPerKilometer}
 						beats={singleRunner.averageHeartRateInBeatsPerMinute}
 						onViewAllClick={onViewAllClick}
+						isSuspect={singleRunner.isSuspect}
 					/>
 				))}
 			</div>

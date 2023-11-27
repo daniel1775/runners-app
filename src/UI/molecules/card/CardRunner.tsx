@@ -78,7 +78,7 @@ const CardRunner = ({
 				)}
 			</div>
 			<div className='flex items-center justify-between'>
-				<div className='flex h-fit items-start'>
+				<div className='flex h-fit'>
 					{dataToRender.map((metric, index) => (
 						<SingleMetric
 							key={index}

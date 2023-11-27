@@ -9,4 +9,5 @@ export type TypeRunnerData = {
 	averagePaceInMinutesPerKilometer: number;
 	totalElevationGainInMeters: number;
 	averageHeartRateInBeatsPerMinute: number;
+	isSuspect?: boolean;
 };

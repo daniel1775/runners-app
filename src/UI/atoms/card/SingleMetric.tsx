@@ -16,7 +16,7 @@ const SingleMetric = ({
 }: TypeSingleMetricProps) => {
 	return (
 		<div
-			className={`flex justify-start px-4 items-center flex-col w-fit ${
+			className={`flex justify-start px-4 items-center h-full flex-col w-fit ${
 				hasBorder ? 'border-gray border-r-[1px]' : ''
 			}
             ${containerStyles ?? ''}`}
