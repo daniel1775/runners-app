@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 
 import runnersDB from '@/lib/data/runners.json';
+import { calculateSuspectRegisters } from '@/lib/helpers/runnerHelper';
 
 import CardRunner from '@/UI/molecules/card/CardRunner';
 import PaginationControls from '@/UI/molecules/pagination/PaginationControls';
@@ -12,12 +13,9 @@ export default function Home() {
 	const allRunners = useMemo(() => {
 		let allRunners = runnersDB as Array<TypeRunnerData>;
 
-		let allRunnersAnalyzed = allRunners.map((singleRunner) => {
-			if (singleRunner.averagePaceInMinutesPerKilometer < 5) {
-				return { ...singleRunner, isSuspect: true };
-			}
-			return { ...singleRunner, isSuspect: false };
-		});
+		let allRunnersAnalyzed = allRunners.map((singleRunner) =>
+			calculateSuspectRegisters(singleRunner)
+		);
 
 		return allRunnersAnalyzed;
 	}, []);
