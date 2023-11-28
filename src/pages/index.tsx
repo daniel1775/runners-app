@@ -63,8 +63,6 @@ export default function Home() {
 		}
 	};
 
-	const onViewAllClick = () => {};
-
 	useEffect(() => {
 		if (filterTag === 'all') {
 			setRunnersToShow(
@@ -119,7 +117,6 @@ export default function Home() {
 						speed={singleRunner.averageSpeedInMetersPerSecond}
 						pace={singleRunner.averagePaceInMinutesPerKilometer}
 						beats={singleRunner.averageHeartRateInBeatsPerMinute}
-						onViewAllClick={onViewAllClick}
 						isSuspect={singleRunner.isSuspect}
 					/>
 				))}

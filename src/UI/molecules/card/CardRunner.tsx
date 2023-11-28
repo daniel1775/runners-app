@@ -1,6 +1,5 @@
 import Text from '../../atoms/Text';
 import SingleMetric from '@/UI/atoms/card/SingleMetric';
-import EyeIcon from '@/assets/svg/eye.svg';
 import WarningIcon from '@/assets/svg/warning.svg';
 
 type TypeCardRunnerProps = {
@@ -14,7 +13,6 @@ type TypeCardRunnerProps = {
 	pace: number;
 	beats: number;
 	isSuspect?: boolean;
-	onViewAllClick: () => void;
 };
 
 const CardRunner = ({
@@ -28,7 +26,6 @@ const CardRunner = ({
 	pace,
 	beats,
 	isSuspect,
-	onViewAllClick,
 }: TypeCardRunnerProps) => {
 	const dataToRender = [
 		{
@@ -78,26 +75,17 @@ const CardRunner = ({
 				)}
 			</div>
 			<div className='flex items-center justify-between'>
-				<div className='flex h-fit'>
-					{dataToRender.map((metric, index) => (
-						<SingleMetric
-							key={index}
-							label={metric.label}
-							value={metric.value}
-							hasBorder={index !== dataToRender.length - 1}
-							containerStyles={index === 0 ? 'pl-0' : ''}
-						/>
-					))}
-				</div>
-				<div
-					className='flex flex-col items-center justify-start'
-					onClick={onViewAllClick}
-				>
-					<EyeIcon className='text-blue w-[20px] h-[16px] mb-1' />
-					<Text className='text-blue text-xs leading-[12px]'>
-						View all <br /> records
-					</Text>
-				</div>
+				{dataToRender.map((metric, index) => (
+					<SingleMetric
+						key={index}
+						label={metric.label}
+						value={metric.value}
+						hasBorder={index !== dataToRender.length - 1}
+						containerStyles={`${index === 0 ? 'pl-0' : ''} ${
+							index === dataToRender.length - 1 ? 'pr-0' : ''
+						}`}
+					/>
+				))}
 			</div>
 		</div>
 	);
