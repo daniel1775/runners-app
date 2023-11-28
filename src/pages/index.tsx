@@ -6,8 +6,10 @@ import { calculateSuspectRegisters } from '@/lib/helpers/runnerHelper';
 import CardRunner from '@/UI/molecules/card/CardRunner';
 import PaginationControls from '@/UI/molecules/pagination/PaginationControls';
 import Header from '@/UI/layouts/Header';
+import SuspectFilterTags from '@/UI/molecules/filter/SuspectFilterTags';
 
 import type { TypeRunnerData } from '@/lib/types/runners';
+import type { TypeSuspectFilterTag } from '@/lib/types/filter';
 
 export default function Home() {
 	const allRunners = useMemo(() => {
@@ -21,8 +23,9 @@ export default function Home() {
 	}, []);
 
 	const [currentPage, setCurrentPage] = useState(1);
-	const recordsPerPage = 20;
+	const [filterTag, setFilterTag] = useState<TypeSuspectFilterTag>('all');
 
+	const recordsPerPage = 20;
 	const indexOfLastRecord = currentPage * recordsPerPage;
 	const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
 	const totalPages = Math.ceil(allRunners.length / recordsPerPage);
@@ -55,6 +58,12 @@ export default function Home() {
 	return (
 		<div>
 			<Header />
+			<div className='flex justify-center mt-4'>
+				<SuspectFilterTags
+					activeFilterTag={filterTag}
+					setActiveFilterTag={setFilterTag}
+				/>
+			</div>
 			<div className='flex justify-center'>
 				<PaginationControls
 					handlePrevPage={handlePrevPage}

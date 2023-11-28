@@ -4,7 +4,8 @@ type TypeButtonProps = {
 	children: string;
 	onClick: () => void;
 	disabled?: boolean;
-	designVariation?: 'blue' | 'underline';
+	designVariation?: 'blue' | 'underline' | 'bordered';
+	className?: string;
 };
 
 const Button = ({
@@ -12,6 +13,7 @@ const Button = ({
 	onClick,
 	disabled,
 	designVariation = 'blue',
+	className,
 }: TypeButtonProps) => {
 	let buttonStyles = '';
 
@@ -21,10 +23,14 @@ const Button = ({
 	if (designVariation === 'underline') {
 		buttonStyles = 'text-blue underline font-semibold';
 	}
+	if (designVariation === 'bordered') {
+		buttonStyles =
+			'text-blue py-1 rounded-md border border-blue font-semibold';
+	}
 
 	return (
 		<button
-			className={`${buttonStyles}`}
+			className={`${buttonStyles} ${className ?? ''}`}
 			onClick={onClick}
 			disabled={disabled}
 		>
