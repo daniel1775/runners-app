@@ -21,6 +21,12 @@ export default function Home() {
 
 		return allRunnersAnalyzed;
 	}, []);
+	const clearRunners = useMemo(() => {
+		return allRunners.filter((singleRunner) => !singleRunner.isSuspect);
+	}, [allRunners]);
+	const suspectRunners = useMemo(() => {
+		return allRunners.filter((singleRunner) => !!singleRunner.isSuspect);
+	}, [allRunners]);
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [filterTag, setFilterTag] = useState<TypeSuspectFilterTag>('all');
@@ -28,11 +34,22 @@ export default function Home() {
 	const recordsPerPage = 20;
 	const indexOfLastRecord = currentPage * recordsPerPage;
 	const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-	const totalPages = Math.ceil(allRunners.length / recordsPerPage);
+	const totalPages = Math.ceil(totalPagesByFilterTag() / recordsPerPage);
 
 	const [runnersToShow, setRunnersToShow] = useState<Array<TypeRunnerData>>(
 		allRunners.slice(indexOfFirstRecord, indexOfLastRecord)
 	);
+
+	function totalPagesByFilterTag() {
+		if (filterTag === 'all') {
+			return allRunners.length;
+		} else if (filterTag === 'clear') {
+			return clearRunners.length;
+		} else if (filterTag === 'suspect') {
+			return suspectRunners.length;
+		}
+		return 0;
+	}
 
 	const handleNextPage = () => {
 		if (currentPage < totalPages) {
@@ -49,6 +66,23 @@ export default function Home() {
 	const onViewAllClick = () => {};
 
 	useEffect(() => {
+		if (filterTag === 'all') {
+			setRunnersToShow(
+				allRunners.slice(indexOfFirstRecord, indexOfLastRecord)
+			);
+		} else if (filterTag === 'clear') {
+			setRunnersToShow(
+				clearRunners.slice(indexOfFirstRecord, indexOfLastRecord)
+			);
+		} else if (filterTag === 'suspect') {
+			setRunnersToShow(
+				suspectRunners.slice(indexOfFirstRecord, indexOfLastRecord)
+			);
+		}
+		// eslint-disable-next-line
+	}, [filterTag]);
+
+	useEffect(() => {
 		setRunnersToShow(
 			allRunners.slice(indexOfFirstRecord, indexOfLastRecord)
 		);
@@ -56,7 +90,7 @@ export default function Home() {
 	}, [currentPage]);
 
 	return (
-		<div>
+		<main className='pb-20'>
 			<Header />
 			<div className='flex justify-center mt-4'>
 				<SuspectFilterTags
@@ -64,7 +98,7 @@ export default function Home() {
 					setActiveFilterTag={setFilterTag}
 				/>
 			</div>
-			<div className='flex justify-center'>
+			<div className='flex justify-center mt-12'>
 				<PaginationControls
 					handlePrevPage={handlePrevPage}
 					handleNextPage={handleNextPage}
@@ -90,7 +124,7 @@ export default function Home() {
 					/>
 				))}
 			</div>
-			<div className='flex justify-center'>
+			<div className='flex justify-center mt-8'>
 				<PaginationControls
 					handlePrevPage={handlePrevPage}
 					handleNextPage={handleNextPage}
@@ -98,6 +132,6 @@ export default function Home() {
 					totalPages={totalPages}
 				/>
 			</div>
-		</div>
+		</main>
 	);
 }
