@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 type TypeButtonProps = {
-	children: string;
-	onClick: () => void;
+	children: ReactNode;
+	onClick?: () => void;
 	disabled?: boolean;
 	designVariation?: 'blue' | 'underline' | 'bordered';
 	className?: string;
+	type?: 'button' | 'submit';
 };
 
 const Button = ({
@@ -14,6 +15,7 @@ const Button = ({
 	disabled,
 	designVariation = 'blue',
 	className,
+	type = 'button',
 }: TypeButtonProps) => {
 	let buttonStyles = '';
 
@@ -33,6 +35,7 @@ const Button = ({
 			className={`${buttonStyles} ${className ?? ''}`}
 			onClick={onClick}
 			disabled={disabled}
+			type={type}
 		>
 			{children}
 		</button>

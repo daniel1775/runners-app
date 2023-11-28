@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 
 import runnersDB from '@/lib/data/runners.json';
 import { calculateSuspectRegisters } from '@/lib/helpers/runnerHelper';
@@ -7,11 +8,22 @@ import CardRunner from '@/UI/molecules/card/CardRunner';
 import PaginationControls from '@/UI/molecules/pagination/PaginationControls';
 import Header from '@/UI/layouts/Header';
 import SuspectFilterTags from '@/UI/molecules/filter/SuspectFilterTags';
+import InputForm from '@/UI/atoms/InputForm';
+import Button from '@/UI/atoms/Button';
+import SearchIcon from '@/assets/svg/search.svg';
 
 import type { TypeRunnerData } from '@/lib/types/runners';
-import type { TypeSuspectFilterTag } from '@/lib/types/filter';
+import type {
+	TypeSuspectFilterTag,
+	TypeSearchUserFilter,
+} from '@/lib/types/filter';
 
 export default function Home() {
+	const formMethods = useForm<TypeSearchUserFilter>({
+		defaultValues: {
+			search: '',
+		},
+	});
 	const allRunners = useMemo(() => {
 		let allRunners = runnersDB as Array<TypeRunnerData>;
 
@@ -30,6 +42,7 @@ export default function Home() {
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [filterTag, setFilterTag] = useState<TypeSuspectFilterTag>('all');
+	const [searchValue, setSearchValue] = useState<string>('');
 
 	const recordsPerPage = 20;
 	const indexOfLastRecord = currentPage * recordsPerPage;
@@ -63,33 +76,67 @@ export default function Home() {
 		}
 	};
 
-	useEffect(() => {
-		if (filterTag === 'all') {
-			setRunnersToShow(
-				allRunners.slice(indexOfFirstRecord, indexOfLastRecord)
-			);
-		} else if (filterTag === 'clear') {
-			setRunnersToShow(
-				clearRunners.slice(indexOfFirstRecord, indexOfLastRecord)
-			);
-		} else if (filterTag === 'suspect') {
-			setRunnersToShow(
-				suspectRunners.slice(indexOfFirstRecord, indexOfLastRecord)
-			);
-		}
-		// eslint-disable-next-line
-	}, [filterTag]);
+	const handleSearchUserById: SubmitHandler<TypeSearchUserFilter> = (
+		formValues
+	) => {
+		setSearchValue(formValues.search);
+	};
 
 	useEffect(() => {
-		setRunnersToShow(
-			allRunners.slice(indexOfFirstRecord, indexOfLastRecord)
+		let runnersToRender = allRunners;
+		if (filterTag === 'all') {
+			runnersToRender = allRunners;
+		} else if (filterTag === 'clear') {
+			runnersToRender = clearRunners;
+		} else if (filterTag === 'suspect') {
+			runnersToRender = suspectRunners;
+		}
+
+		if (searchValue) {
+			runnersToRender = runnersToRender.filter(
+				(singleRunner) => singleRunner.userId === Number(searchValue)
+			);
+		}
+
+		runnersToRender = runnersToRender.slice(
+			indexOfFirstRecord,
+			indexOfLastRecord
 		);
+
+		setRunnersToShow(runnersToRender);
 		// eslint-disable-next-line
-	}, [currentPage]);
+	}, [filterTag, currentPage]);
 
 	return (
 		<main className='pb-20'>
 			<Header />
+			<FormProvider {...formMethods}>
+				<form
+					className='w-full flex flex-col items-center md:max-w-[750px] mx-auto'
+					onSubmit={formMethods.handleSubmit(handleSearchUserById)}
+				>
+					<div className='w-full'>
+						<label
+							htmlFor='search'
+							className='text-left'
+						>
+							Search by user id
+						</label>
+						<div className='flex w-full h-fit gap-2'>
+							<InputForm
+								name='search'
+								type='number'
+							/>
+							<Button
+								className='h-auto aspect-square px-2 rounded'
+								type='submit'
+							>
+								<SearchIcon className='h-[22px] w-[22px]' />
+							</Button>
+						</div>
+					</div>
+				</form>
+			</FormProvider>
 			<div className='flex justify-center mt-4'>
 				<SuspectFilterTags
 					activeFilterTag={filterTag}
