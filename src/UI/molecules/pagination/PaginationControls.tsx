@@ -15,7 +15,7 @@ const PaginationControls = ({
 	totalPages,
 }: TypePaginationControlsProps) => {
 	return (
-		<div className='flex justify-center'>
+		<div className='flex justify-center py-8'>
 			<Button
 				onClick={handlePrevPage}
 				disabled={currentPage === 1}
