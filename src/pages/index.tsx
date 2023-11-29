@@ -8,22 +8,11 @@ import CardRunner from '@/UI/molecules/card/CardRunner';
 import PaginationControls from '@/UI/molecules/pagination/PaginationControls';
 import Header from '@/UI/layouts/Header';
 import SuspectFilterTags from '@/UI/molecules/filter/SuspectFilterTags';
-import InputForm from '@/UI/atoms/InputForm';
-import Button from '@/UI/atoms/Button';
-import SearchIcon from '@/assets/svg/search.svg';
 
 import type { TypeRunnerData } from '@/lib/types/runners';
-import type {
-	TypeSuspectFilterTag,
-	TypeSearchUserFilter,
-} from '@/lib/types/filter';
+import type { TypeSuspectFilterTag } from '@/lib/types/filter';
 
 export default function Home() {
-	const formMethods = useForm<TypeSearchUserFilter>({
-		defaultValues: {
-			search: '',
-		},
-	});
 	const allRunners = useMemo(() => {
 		let allRunners = runnersDB as Array<TypeRunnerData>;
 
@@ -40,47 +29,70 @@ export default function Home() {
 		return allRunners.filter((singleRunner) => !!singleRunner.isSuspect);
 	}, [allRunners]);
 
-	const [currentPage, setCurrentPage] = useState(1);
+	const [allPage, setAllPage] = useState(1);
+	const [suspectPage, setSuspectPage] = useState(1);
+	const [clearPage, setClearPage] = useState(1);
 	const [filterTag, setFilterTag] = useState<TypeSuspectFilterTag>('all');
-	const [searchValue, setSearchValue] = useState<string>('');
 
 	const recordsPerPage = 20;
-	const indexOfLastRecord = currentPage * recordsPerPage;
+	const indexOfLastRecord = currentPage() * recordsPerPage;
 	const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-	const totalPages = Math.ceil(totalPagesByFilterTag() / recordsPerPage);
 
+	const [totalPages, setTotalPages] = useState<number>(
+		allRunners.length / recordsPerPage
+	);
 	const [runnersToShow, setRunnersToShow] = useState<Array<TypeRunnerData>>(
 		allRunners.slice(indexOfFirstRecord, indexOfLastRecord)
 	);
 
-	function totalPagesByFilterTag() {
-		if (filterTag === 'all') {
-			return allRunners.length;
-		} else if (filterTag === 'clear') {
-			return clearRunners.length;
-		} else if (filterTag === 'suspect') {
-			return suspectRunners.length;
-		}
-		return 0;
-	}
-
 	const handleNextPage = () => {
-		if (currentPage < totalPages) {
-			setCurrentPage(currentPage + 1);
+		if (allPage < totalPages) {
+			if (filterTag === 'all') {
+				setAllPage(allPage + 1);
+			}
+		}
+		if (suspectPage < totalPages) {
+			if (filterTag === 'suspect') {
+				setSuspectPage(suspectPage + 1);
+			}
+		}
+		if (clearPage < totalPages) {
+			if (filterTag === 'clear') {
+				setClearPage(clearPage + 1);
+			}
 		}
 	};
 
 	const handlePrevPage = () => {
-		if (currentPage > 1) {
-			setCurrentPage(currentPage - 1);
+		if (allPage < totalPages) {
+			if (filterTag === 'all') {
+				setAllPage(allPage - 1);
+			}
+		}
+		if (suspectPage < totalPages) {
+			if (filterTag === 'suspect') {
+				setSuspectPage(suspectPage - 1);
+			}
+		}
+		if (clearPage < totalPages) {
+			if (filterTag === 'clear') {
+				setClearPage(clearPage - 1);
+			}
 		}
 	};
 
-	const handleSearchUserById: SubmitHandler<TypeSearchUserFilter> = (
-		formValues
-	) => {
-		setSearchValue(formValues.search);
-	};
+	function currentPage() {
+		if (filterTag === 'clear') {
+			return clearPage;
+		}
+		if (filterTag === 'suspect') {
+			return suspectPage;
+		}
+		if (filterTag === 'all') {
+			return allPage;
+		}
+		return 0;
+	}
 
 	useEffect(() => {
 		let runnersToRender = allRunners;
@@ -92,11 +104,7 @@ export default function Home() {
 			runnersToRender = suspectRunners;
 		}
 
-		if (searchValue) {
-			runnersToRender = runnersToRender.filter(
-				(singleRunner) => singleRunner.userId === Number(searchValue)
-			);
-		}
+		setTotalPages(Math.floor(runnersToRender.length / recordsPerPage));
 
 		runnersToRender = runnersToRender.slice(
 			indexOfFirstRecord,
@@ -105,38 +113,11 @@ export default function Home() {
 
 		setRunnersToShow(runnersToRender);
 		// eslint-disable-next-line
-	}, [filterTag, currentPage]);
+	}, [filterTag, currentPage()]);
 
 	return (
 		<main className='pb-20'>
 			<Header />
-			<FormProvider {...formMethods}>
-				<form
-					className='w-full flex flex-col items-center md:max-w-[750px] mx-auto'
-					onSubmit={formMethods.handleSubmit(handleSearchUserById)}
-				>
-					<div className='w-full'>
-						<label
-							htmlFor='search'
-							className='text-left'
-						>
-							Search by user id
-						</label>
-						<div className='flex w-full h-fit gap-2'>
-							<InputForm
-								name='search'
-								type='number'
-							/>
-							<Button
-								className='h-auto aspect-square px-2 rounded'
-								type='submit'
-							>
-								<SearchIcon className='h-[22px] w-[22px]' />
-							</Button>
-						</div>
-					</div>
-				</form>
-			</FormProvider>
 			<div className='flex justify-center mt-4'>
 				<SuspectFilterTags
 					activeFilterTag={filterTag}
@@ -147,11 +128,11 @@ export default function Home() {
 				<PaginationControls
 					handlePrevPage={handlePrevPage}
 					handleNextPage={handleNextPage}
-					currentPage={currentPage}
+					currentPage={currentPage()}
 					totalPages={totalPages}
 				/>
 			</div>
-			<div className='flex flex-col gap-3 w-[90%] mx-auto'>
+			<div className='flex flex-col gap-3 w-full overflow-x-auto md:w-[90%] mx-auto'>
 				{runnersToShow.map((singleRunner) => (
 					<CardRunner
 						key={singleRunner.id}
@@ -172,7 +153,7 @@ export default function Home() {
 				<PaginationControls
 					handlePrevPage={handlePrevPage}
 					handleNextPage={handleNextPage}
-					currentPage={currentPage}
+					currentPage={currentPage()}
 					totalPages={totalPages}
 				/>
 			</div>

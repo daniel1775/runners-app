@@ -80,7 +80,6 @@ const CardRunner = ({
 						key={index}
 						label={metric.label}
 						value={metric.value}
-						hasBorder={index !== dataToRender.length - 1}
 						containerStyles={`${index === 0 ? 'pl-0' : ''} ${
 							index === dataToRender.length - 1 ? 'pr-0' : ''
 						}`}
