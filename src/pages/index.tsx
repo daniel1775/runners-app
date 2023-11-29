@@ -1,5 +1,4 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 
 import runnersDB from '@/lib/data/runners.json';
 import { calculateSuspectRegisters } from '@/lib/helpers/runnerHelper';
