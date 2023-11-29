@@ -19,7 +19,7 @@ const SuspectFilterTags = ({
 		activeFilterTag === tag ? 'bg-light-blue' : '';
 
 	return (
-		<div className='flex justify-center gap-5'>
+		<div className='flex justify-center gap-1 md:gap-5'>
 			<Button
 				designVariation='bordered'
 				onClick={() => handleClickFilterTag('all')}

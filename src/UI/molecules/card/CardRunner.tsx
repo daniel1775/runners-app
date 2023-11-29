@@ -64,7 +64,7 @@ const CardRunner = ({
 
 	return (
 		<div
-			className={`h-auto w-full px-8 py-4 shadow rounded ${
+			className={`h-auto min-w-[770px] px-8 py-4 shadow rounded ${
 				isSuspect ? 'bg-light-red' : 'bg-light-gray'
 			}`}
 		>

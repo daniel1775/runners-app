@@ -14,7 +14,7 @@ const config: Config = {
 				'light-blue': '#E8ECFC',
 				'dark-gray': '#4B4A4A',
 				gray: '#797676',
-				'light-gray': '#F8F9FA',
+				'light-gray': '#E4E5E5',
 				'light-red': '#FEDCDC',
 			},
 		},

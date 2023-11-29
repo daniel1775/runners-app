@@ -131,7 +131,7 @@ export default function Home() {
 					totalPages={totalPages}
 				/>
 			</div>
-			<div className='flex flex-col gap-3 w-full overflow-x-auto md:w-[90%] mx-auto'>
+			<div className='flex px-4 md:px-0 flex-col gap-3 w-full overflow-x-auto md:w-[90%] mx-auto'>
 				{runnersToShow.map((singleRunner) => (
 					<CardRunner
 						key={singleRunner.id}
